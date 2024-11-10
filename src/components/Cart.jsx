@@ -8,6 +8,7 @@ function CartPage() {
   const [subtotal, setSubtotal] = useState(0);  // For storing subtotal
   const [totalQuantity, setTotalQuantity] = useState(0);  // For storing total quantity
   const navigate = useNavigate();  // Hook to navigate to different pages
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     fetchCartItems();
@@ -17,11 +18,13 @@ function CartPage() {
     navigate("/")
   }
   const fetchCartItems = () => {
-    axios.get('http://localhost:3001/orderedbooks')
+    axios.get(`${apiUrl}/orderedbooks`)
+    axios.get(`http://localhost:3001/orderedbooks`)
       .then(response => {
         const orderedBooks = response.data || [];
         console.log("ordered books: ", orderedBooks);
-        axios.get('http://localhost:3001/books')
+        axios.get(`${apiUrl}/books`)
+        axios.get(`http://localhost:3001/books`)
           .then(res => {
             const books = res.data;
             setBooksData(books);
@@ -68,6 +71,12 @@ function CartPage() {
 
     // After calculating subtotal, update subtotal in the orderedbooks JSON
     items.forEach(item => {
+      axios.put(`${apiUrl}/orderedbooks/${item.id}`, {
+        bookid: item.bookid,
+        quantity: item.quantity,
+        price: item.price,  // Use the item's price, not the book's
+        wtotal: item.price * item.quantity  // Calculate subtotal for each item
+      })
       axios.put(`http://localhost:3001/orderedbooks/${item.id}`, {
         bookid: item.bookid,
         quantity: item.quantity,
@@ -84,6 +93,13 @@ function CartPage() {
 
     const cartItem = cartItems.find(item => item.bookid === bookId);
     if (cartItem) {
+      axios.put(`${apiUrl}/orderedbooks/${cartItem.id}`, {
+        bookid: cartItem.bookid,
+        quantity: newQuantity,
+        price: cartItem.price,  // Keeping only necessary fields
+        // total: cartItem.price * newQuantity,
+        subtotal: cartItem.price * newQuantity  // Update subtotal here
+      })
       axios.put(`http://localhost:3001/orderedbooks/${cartItem.id}`, {
         bookid: cartItem.bookid,
         quantity: newQuantity,
@@ -101,6 +117,7 @@ function CartPage() {
   const removeItem = (bookId) => {
     const cartItem = cartItems.find(item => item.bookid === bookId);
     if (cartItem) {
+      axios.delete(`${apiUrl}/orderedbooks/${cartItem.id}`)
       axios.delete(`http://localhost:3001/orderedbooks/${cartItem.id}`)
         .then(() => {
           fetchCartItems();  // Fetch updated cart after removal

@@ -9,6 +9,7 @@ function UserLogin() {
         password: "",
     })
     const navigate = useNavigate();
+    const apiUrl = process.env.REACT_APP_API_URL;
     const handleSetDetails = (e) => {
         const { name, value } = e.target;
         setDetails(prevState => ({
@@ -18,6 +19,7 @@ function UserLogin() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
+            axios.get(`${apiUrl}/users/${details.id}`)
             axios.get(`http://localhost:3001/users/${details.id}`)
                 .then(res => {
                     if (res.data.password === details.password) {

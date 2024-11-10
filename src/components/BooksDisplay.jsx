@@ -15,8 +15,10 @@ function BooksDisplay() {
     const [addedBook, setAddedBook] = useState(null);
     const genres = ["fiction", "non-fiction", "comedy", "thriller", "fantasy", "romance"];
     const navigate = useNavigate();
+    const apiUrl = process.env.REACT_APP_API_URL;
     useEffect(() => {
-        axios.get("http://localhost:3001/books")
+        axios.get(`${apiUrl}/books`)
+        axios.get(`http://localhost:3001/books`)
             .then(res => {
                 setBooksData(res.data);
                 setFilteredBooks(res.data);
@@ -65,7 +67,8 @@ function BooksDisplay() {
         setFilteredBooks(filtered);
     }
     const addToCart = (book, action = 'add') => {
-        axios.get('http://localhost:3001/orderedbooks')
+        axios.get(`${apiUrl}/orderedbooks`)
+        axios.get(`http://localhost:3001/orderedbooks`)
             .then(response => {
                 const cartData = response.data;
                 const existingBook = cartData.find(order => order.bookid === book.bookid);
@@ -73,6 +76,10 @@ function BooksDisplay() {
                     // Update quantity if book already in cart
                     const newQuantity = action === 'add' ? existingBook.quantity + 1 : existingBook.quantity - 1;
                     if (newQuantity > 0) {
+                        axios.put(`${apiUrl}orderedbooks/${existingBook.id}`, {
+                            ...existingBook,
+                            quantity: newQuantity
+                        })
                         axios.put(`http://localhost:3001/orderedbooks/${existingBook.id}`, {
                             ...existingBook,
                             quantity: newQuantity
@@ -87,7 +94,12 @@ function BooksDisplay() {
                     }
                 } else {
                     // Add new book to cart
-                    axios.post('http://localhost:3001/orderedbooks', {
+                    axios.post(`${apiUrl}/orderedbooks`, {
+                        bookid: book.bookid,
+                        quantity: 1,
+                        price: book.price
+                    })
+                    axios.post(`http://localhost:3001/orderedbooks`, {
                         bookid: book.bookid,
                         quantity: 1,
                         price: book.price
@@ -104,6 +116,7 @@ function BooksDisplay() {
 
 
     const removeBookFromCart = (id) => {
+        axios.delete(`${apiUrl}/orderedbooks/${id}`)
         axios.delete(`http://localhost:3001/orderedbooks/${id}`)
             .then(() => {
                 updateCartState();
@@ -112,7 +125,8 @@ function BooksDisplay() {
     };
 
     const updateCartState = () => {
-        axios.get('http://localhost:3001/orderedbooks')
+        axios.get(`${apiUrl}/orderedbooks`)
+        axios.get(`http://localhost:3001/orderedbooks`)
             .then(response => {
                 setCart(response.data || []);
             })

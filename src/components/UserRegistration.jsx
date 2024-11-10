@@ -16,6 +16,7 @@ function UserRegistration() {
         country: "",
         dob: "",
     })
+    const apiUrl = process.env.REACT_APP_API_URL;
     const handleSetDetails = (e) => {
         const { name, value } = e.target;
         setDetails(prevstate => ({
@@ -75,7 +76,8 @@ function UserRegistration() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (isValidate()) {
-            axios.post("http://localhost:3001/users", details)
+            axios.post(`${apiUrl}/users`, details)
+            axios.post(`http://localhost:3001/users`, details)
                 .then(res => toast.success("Registered successfuly"))
                 .catch(err => console.log(err));
         }

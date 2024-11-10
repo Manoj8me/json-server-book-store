@@ -1,18 +1,35 @@
 import React from 'react';
-import "../styles/About.css";
+import "../styles/Projects.css";
 
-function About() {
+function Projects() {
+  const projects = [
+    {
+      name: "Project One",
+      description: "A brief description of the project.",
+      technologies: "React, JavaScript, CSS",
+      link: "https://github.com/yourusername/project1",
+    },
+    {
+      name: "Project Two",
+      description: "A brief description of another project.",
+      technologies: "Node.js, Express, MongoDB",
+      link: "https://github.com/yourusername/project2",
+    },
+  ];
+
   return (
-    <div className="about">
-      <h1>About Me</h1>
-      <p>
-        I'm a passionate [Your Field, e.g., developer], with experience in [mention main
-        technologies, e.g., JavaScript, React, Java]. I started my journey in [brief background].
-      </p>
-      <h2>Interests & Hobbies</h2>
-      <p>Some personal interests or hobbies that help people get to know you better.</p>
+    <div className="projects">
+      <h1>Projects</h1>
+      {projects.map((project, index) => (
+        <div key={index} className="project-card">
+          <h2>{project.name}</h2>
+          <p>{project.description}</p>
+          <p><strong>Technologies Used:</strong> {project.technologies}</p>
+          <a href={project.link} target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      ))}
     </div>
   );
 }
 
-export default About;
+export default Projects;

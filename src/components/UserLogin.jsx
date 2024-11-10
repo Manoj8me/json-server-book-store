@@ -20,7 +20,7 @@ function UserLogin() {
         e.preventDefault();
         if (validate()) {
             axios.get(`${apiUrl}/users/${details.id}`)
-            axios.get(`http://localhost:3001/users/${details.id}`)
+                // axios.get(`http://localhost:3001/users/${details.id}`)
                 .then(res => {
                     if (res.data.password === details.password) {
                         toast.success("Logged in successfully");

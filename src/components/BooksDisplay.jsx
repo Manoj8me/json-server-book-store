@@ -18,7 +18,7 @@ function BooksDisplay() {
     const apiUrl = process.env.REACT_APP_API_URL;
     useEffect(() => {
         axios.get(`${apiUrl}/books`)
-        axios.get(`http://localhost:3001/books`)
+            // axios.get(`http://localhost:3001/books`)
             .then(res => {
                 setBooksData(res.data);
                 setFilteredBooks(res.data);
@@ -68,7 +68,7 @@ function BooksDisplay() {
     }
     const addToCart = (book, action = 'add') => {
         axios.get(`${apiUrl}/orderedbooks`)
-        axios.get(`http://localhost:3001/orderedbooks`)
+            // axios.get(`http://localhost:3001/orderedbooks`)
             .then(response => {
                 const cartData = response.data;
                 const existingBook = cartData.find(order => order.bookid === book.bookid);
@@ -80,10 +80,10 @@ function BooksDisplay() {
                             ...existingBook,
                             quantity: newQuantity
                         })
-                        axios.put(`http://localhost:3001/orderedbooks/${existingBook.id}`, {
-                            ...existingBook,
-                            quantity: newQuantity
-                        })
+                            // axios.put(`http://localhost:3001/orderedbooks/${existingBook.id}`, {
+                            //     ...existingBook,
+                            //     quantity: newQuantity
+                            // })
                             .then(() => {
                                 setAddedBook(book);
                                 updateCartState();
@@ -99,11 +99,11 @@ function BooksDisplay() {
                         quantity: 1,
                         price: book.price
                     })
-                    axios.post(`http://localhost:3001/orderedbooks`, {
-                        bookid: book.bookid,
-                        quantity: 1,
-                        price: book.price
-                    })
+                        // axios.post(`http://localhost:3001/orderedbooks`, {
+                        //     bookid: book.bookid,
+                        //     quantity: 1,
+                        //     price: book.price
+                        // })
                         .then(() => {
                             setAddedBook(book);
                             updateCartState();
@@ -117,7 +117,7 @@ function BooksDisplay() {
 
     const removeBookFromCart = (id) => {
         axios.delete(`${apiUrl}/orderedbooks/${id}`)
-        axios.delete(`http://localhost:3001/orderedbooks/${id}`)
+            // axios.delete(`http://localhost:3001/orderedbooks/${id}`)
             .then(() => {
                 updateCartState();
             })
@@ -126,7 +126,7 @@ function BooksDisplay() {
 
     const updateCartState = () => {
         axios.get(`${apiUrl}/orderedbooks`)
-        axios.get(`http://localhost:3001/orderedbooks`)
+            // axios.get(`http://localhost:3001/orderedbooks`)
             .then(response => {
                 setCart(response.data || []);
             })

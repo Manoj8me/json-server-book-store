@@ -77,7 +77,7 @@ function UserRegistration() {
         e.preventDefault();
         if (isValidate()) {
             axios.post(`${apiUrl}/users`, details)
-            axios.post(`http://localhost:3001/users`, details)
+                // axios.post(`http://localhost:3001/users`, details)
                 .then(res => toast.success("Registered successfuly"))
                 .catch(err => console.log(err));
         }

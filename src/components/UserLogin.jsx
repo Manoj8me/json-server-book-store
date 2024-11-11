@@ -10,6 +10,7 @@ function UserLogin() {
     })
     const navigate = useNavigate();
     const apiUrl = process.env.REACT_APP_API_URL;
+    console.log("API URL:", apiUrl);
     const handleSetDetails = (e) => {
         const { name, value } = e.target;
         setDetails(prevState => ({
